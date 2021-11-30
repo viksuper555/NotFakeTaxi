@@ -1,4 +1,4 @@
-package com.example.notfaketaxi.entites;
+package com.example.notfaketaxi.entities;
 
 
 import javax.persistence.*;

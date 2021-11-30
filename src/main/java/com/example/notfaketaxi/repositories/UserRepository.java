@@ -1,7 +1,6 @@
 package com.example.notfaketaxi.repositories;
 
-import com.example.notfaketaxi.entites.User;
-import org.springframework.data.domain.Example;
+import com.example.notfaketaxi.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
