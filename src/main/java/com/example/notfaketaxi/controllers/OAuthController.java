@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -31,7 +30,7 @@ public class OAuthController {
     }
 
     @PostMapping(path = "/createauthcode")
-    public ResponseEntity<UUID> CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
+    public ResponseEntity CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
          OAuth oAuthByUser = oauthRepo.findOAuthByUser(request.userName, request.password);
 
         if(oAuthByUser == null)
@@ -41,7 +40,7 @@ public class OAuthController {
         oAuthByUser.authorizationCode = code;
         oauthRepo.save(oAuthByUser);
 
-        return new ResponseEntity.ok(code);
+        return new ResponseEntity(code, HttpStatus.OK);
 
     }
 
