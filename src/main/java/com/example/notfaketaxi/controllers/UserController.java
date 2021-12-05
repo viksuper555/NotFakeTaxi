@@ -1,15 +1,13 @@
 package com.example.notfaketaxi.controllers;
 
 
-import com.example.notfaketaxi.entites.User;
+import com.example.notfaketaxi.entities.User;
 import com.example.notfaketaxi.repositories.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/authorization")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserRepository userRepo;

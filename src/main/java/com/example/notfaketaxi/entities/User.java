@@ -1,7 +1,8 @@
-package com.example.notfaketaxi.entites;
+package com.example.notfaketaxi.entities;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -18,6 +19,8 @@ public class User {
     @Column()
     private String password;
 
+    @ManyToMany(mappedBy="role")
+    private Set<Role> roles;
 
     // Getters and Setters
     public Long getId() {

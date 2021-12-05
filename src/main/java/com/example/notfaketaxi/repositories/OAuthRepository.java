@@ -1,11 +1,12 @@
 package com.example.notfaketaxi.repositories;
 
+import com.example.notfaketaxi.entities.OAuth;
 import com.example.notfaketaxi.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface OAuthRepository extends JpaRepository<OAuth,Long> {
 
-    Optional<User> findUserByUsername(String Username);
+   OAuth findOAuthByUser(String userName, String password);
 }
