@@ -1,8 +1,5 @@
 package com.example.notfaketaxi.entities;
 
-import lombok.Data;
-import org.hibernate.id.GUIDGenerator;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
@@ -15,9 +12,10 @@ public class OAuth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
+
     @ManyToOne
-    @JoinColumn(name = "user")
-    private User user;
+    @JoinColumn(name = "client")
+    private Client client;
 
     public UUID authorizationCode;
 
@@ -34,12 +32,12 @@ public class OAuth {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public Client getClient() {
+        return client;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public UUID getAuthorizationCode() {
@@ -74,11 +72,10 @@ public class OAuth {
         ExpireDate = expireDate;
     }
 
-    public OAuth(int id, UUID authorizationCode, UUID authorizationToken, Date createDate, Date expireDate) {
-        this.id = id;
+    public OAuth(UUID authorizationCode, Date createDate, Date expireDate, Client client) {
         this.authorizationCode = authorizationCode;
-        this.authorizationToken = authorizationToken;
         this.CreateDate = createDate;
         this.ExpireDate = expireDate;
+        this.client = client;
     }
 }

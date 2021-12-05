@@ -5,8 +5,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "clients")
-public class User {
+@Table(name = "client")
+public class Client {
 
     // Fields
     @Id
@@ -19,7 +19,7 @@ public class User {
     @Column()
     private String password;
 
-    @ManyToMany(mappedBy="role")
+    @ManyToMany
     private Set<Role> roles;
 
     // Getters and Setters
@@ -43,9 +43,9 @@ public class User {
 
     //Constructor
 
-    public User(){
+    public Client(){
     }
-    public User(String username, String password) {
+    public Client(String username, String password) {
         this.username = username;
         this.password = password;
     }

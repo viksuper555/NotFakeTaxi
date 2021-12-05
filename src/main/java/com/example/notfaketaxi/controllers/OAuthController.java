@@ -1,14 +1,16 @@
 package com.example.notfaketaxi.controllers;
 
+import com.example.notfaketaxi.entities.Client;
 import com.example.notfaketaxi.entities.OAuth;
 import com.example.notfaketaxi.models.AuthorizationCodeRequest;
+import com.example.notfaketaxi.repositories.ClientRepository;
 import com.example.notfaketaxi.repositories.OAuthRepository;
-import org.apache.tomcat.jni.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -16,38 +18,34 @@ import java.util.UUID;
 @RequestMapping("/authorization")
 public class OAuthController {
 
-    private List<User> users;
     private final OAuthRepository oauthRepo;
+    private final ClientRepository clientRepo;
 
-    public OAuthController(List<User> users, OAuthRepository oauthrepo){
-        this.users = users;
+    public OAuthController(OAuthRepository oauthrepo, ClientRepository clientRepo){
         this.oauthRepo = oauthrepo;
-    }
-
-    @GetMapping("/fetch")
-    public List<OAuth> getAllPeople() {
-        return oauthRepo.findAll();
+        this.clientRepo = clientRepo;
     }
 
     @PostMapping(path = "/createauthcode")
     public ResponseEntity CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
-         OAuth oAuthByUser = oauthRepo.findOAuthByUser(request.userName, request.password);
+        Optional<Client> client = clientRepo.findUserByUsernameAndPassword(request.userName, request.password);
 
-        if(oAuthByUser == null)
+        if(client.isEmpty())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
         UUID code =  UUID.randomUUID();
-        oAuthByUser.authorizationCode = code;
-        oauthRepo.save(oAuthByUser);
 
+        //1 minute expiration period
+        OAuth oauth = new OAuth(code, new Date(), new Date(System.currentTimeMillis() + 60 * 1000), client.get());
+        oauthRepo.save(oauth);
         return new ResponseEntity(code, HttpStatus.OK);
 
     }
 
     @PostMapping(path = "/createauthtoken")
     public UUID CreateAuthorizationToken(@RequestBody AuthorizationCodeRequest request){
-        if(request.code == null);
-
+//        if(request.code == null);
+//
         return null;
     }
 
