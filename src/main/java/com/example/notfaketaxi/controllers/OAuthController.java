@@ -2,6 +2,7 @@ package com.example.notfaketaxi.controllers;
 
 import com.example.notfaketaxi.entities.Client;
 import com.example.notfaketaxi.entities.OAuth;
+import com.example.notfaketaxi.models.AccessTokenRequest;
 import com.example.notfaketaxi.models.AuthorizationCodeRequest;
 import com.example.notfaketaxi.repositories.ClientRepository;
 import com.example.notfaketaxi.repositories.OAuthRepository;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
+
+
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -28,25 +31,37 @@ public class OAuthController {
 
     @PostMapping(path = "/createauthcode")
     public ResponseEntity CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
-        Optional<Client> client = clientRepo.findUserByUsernameAndPassword(request.userName, request.password);
+        Optional<Client> client = clientRepo.findUserByUsernameAndPassword(request.username, request.password);
 
         if(client.isEmpty())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
         UUID code =  UUID.randomUUID();
 
+        System.out.println(code);
+
         //1 minute expiration period
-        OAuth oauth = new OAuth(code, new Date(), new Date(System.currentTimeMillis() + 60 * 1000), client.get());
+        OAuth oauth = new OAuth(code, new Date(), new Date(System.currentTimeMillis() + 600 * 1000 ), client.get());
         oauthRepo.save(oauth);
         return new ResponseEntity(code, HttpStatus.OK);
 
     }
 
     @PostMapping(path = "/createauthtoken")
-    public UUID CreateAuthorizationToken(@RequestBody AuthorizationCodeRequest request){
-//        if(request.code == null);
-//
-        return null;
+    public ResponseEntity CreateAuthorizationToken(@RequestBody AccessTokenRequest request){
+        Optional<OAuth> clientCode = oauthRepo.findOAuthByAuthorizationCode(request.authorization_code);
+        //request.expireDate
+        Date todayDate = new Date();
+        if(clientCode.isEmpty() || request.expire_date.before(todayDate))
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+
+        UUID token =  UUID.randomUUID();
+
+        OAuth oauth = new OAuth(token,new Date(), new Date(System.currentTimeMillis() + 60 * 1000  * 60 * 24));
+        oauth.setAuthorizationToken(token);
+        oauthRepo.save(oauth);
+        return new ResponseEntity(token, HttpStatus.OK);
+
     }
 
 }

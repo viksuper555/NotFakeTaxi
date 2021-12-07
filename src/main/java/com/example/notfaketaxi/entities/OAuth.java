@@ -14,7 +14,7 @@ public class OAuth {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "client")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     public UUID authorizationCode;
@@ -70,6 +70,13 @@ public class OAuth {
 
     public void setExpireDate(Date expireDate) {
         ExpireDate = expireDate;
+    }
+
+    public OAuth(UUID authorizationToken,Date createDate, Date expireDate) {
+        this.authorizationToken = authorizationToken;
+        this.CreateDate = createDate;
+        this.ExpireDate = expireDate;
+
     }
 
     public OAuth(UUID authorizationCode, Date createDate, Date expireDate, Client client) {
