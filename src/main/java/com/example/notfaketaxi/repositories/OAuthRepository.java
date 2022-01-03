@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface OAuthRepository extends JpaRepository<OAuth,Long> {
    Optional<OAuth> findOAuthByAuthorizationCode(UUID code);
-
+   Optional<OAuth> findOAuthByAccessTokenAndExpireDateAfter(UUID token, Date today);
 }

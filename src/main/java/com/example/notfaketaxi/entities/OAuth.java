@@ -17,12 +17,12 @@ public class OAuth {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    public UUID authorizationCode;
+    private UUID authorizationCode;
 
     private UUID accessToken;
 
-    private Date CreateDate;
-    private Date ExpireDate;
+    private Date createDate;
+    private Date expireDate;
 
     public OAuth(){
 
@@ -57,32 +57,32 @@ public class OAuth {
     }
 
     public Date getCreateDate() {
-        return CreateDate;
+        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
-        CreateDate = createDate;
+        this.createDate = createDate;
     }
 
     public Date getExpireDate() {
-        return ExpireDate;
+        return expireDate;
     }
 
     public void setExpireDate(Date expireDate) {
-        ExpireDate = expireDate;
+        this.expireDate = expireDate;
     }
 
     public OAuth(UUID authorizationToken,Date createDate, Date expireDate) {
         this.accessToken = authorizationToken;
-        this.CreateDate = createDate;
-        this.ExpireDate = expireDate;
+        this.createDate = createDate;
+        this.expireDate = expireDate;
 
     }
 
     public OAuth(UUID authorizationCode, Date createDate, Date expireDate, Client client) {
         this.authorizationCode = authorizationCode;
-        this.CreateDate = createDate;
-        this.ExpireDate = expireDate;
+        this.createDate = createDate;
+        this.expireDate = expireDate;
         this.client = client;
     }
 }
