@@ -2,8 +2,9 @@ package com.example.notfaketaxi.controllers;
 
 import com.example.notfaketaxi.entities.Client;
 import com.example.notfaketaxi.entities.OAuth;
-import com.example.notfaketaxi.models.AccessTokenRequest;
-import com.example.notfaketaxi.models.AuthorizationCodeRequest;
+import com.example.notfaketaxi.models.requests.AccessTokenRequest;
+import com.example.notfaketaxi.models.requests.AuthorizationCodeRequest;
+import com.example.notfaketaxi.models.responses.AuthorizationCodeResponse;
 import com.example.notfaketaxi.repositories.ClientRepository;
 import com.example.notfaketaxi.repositories.OAuthRepository;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class OAuthController {
 
     @PostMapping(path = "/createauthcode")
     public ResponseEntity CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
-        Optional<Client> client = clientRepo.findUserByUsernameAndPassword(request.username, request.password);
+        Optional<Client> client = clientRepo.findClientByUsernameAndPassword(request.username, request.password);
 
         if(client.isEmpty())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -43,11 +44,11 @@ public class OAuthController {
         //1 minute expiration period
         OAuth oauth = new OAuth(code, new Date(), new Date(System.currentTimeMillis() + 600 * 1000 ), client.get());
         oauthRepo.save(oauth);
-        return new ResponseEntity(code, HttpStatus.OK);
+        return new ResponseEntity(new AuthorizationCodeResponse(code, "Success!"), HttpStatus.OK);
 
     }
 
-    @PostMapping(path = "/createauthtoken")
+    @PostMapping(path = "/createaccesstoken")
     public ResponseEntity CreateAuthorizationToken(@RequestBody AccessTokenRequest request){
         Optional<OAuth> clientCode = oauthRepo.findOAuthByAuthorizationCode(request.authorization_code);
 

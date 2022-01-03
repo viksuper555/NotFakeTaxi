@@ -1,4 +1,4 @@
-package com.example.notfaketaxi.models;
+package com.example.notfaketaxi.models.requests;
 
 public class AuthorizationCodeRequest {
 

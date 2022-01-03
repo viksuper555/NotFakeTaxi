@@ -1,9 +1,7 @@
 package com.example.notfaketaxi.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.notfaketaxi.entities.Client;
+import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin(origins = "*")
@@ -12,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping("/test")
-    public String test()
+    public String test(@RequestAttribute Client client)
     {
-        return "Hello world !";
+        return String.format("Hello, %s!", client.getUsername());
     }
 
 

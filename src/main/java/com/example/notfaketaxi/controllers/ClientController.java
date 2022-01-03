@@ -25,7 +25,7 @@ public class ClientController {
     }
     @PostMapping("/register")
     public Client registerUser(String username, String password){
-        return clientRepo.save(clientRepo.findUserByUsername(username)
+        return clientRepo.save(clientRepo.findClientByUsername(username)
                 .orElse(new Client(username, password)));
 
     }
