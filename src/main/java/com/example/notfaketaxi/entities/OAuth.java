@@ -19,7 +19,7 @@ public class OAuth {
 
     public UUID authorizationCode;
 
-    private UUID authorizationToken;
+    private UUID accessToken;
 
     private Date CreateDate;
     private Date ExpireDate;
@@ -48,12 +48,12 @@ public class OAuth {
         this.authorizationCode = authorizationCode;
     }
 
-    public UUID getAuthorizationToken() {
-        return authorizationToken;
+    public UUID getAccessToken() {
+        return accessToken;
     }
 
-    public void setAuthorizationToken(UUID authorizationToken) {
-        this.authorizationToken = authorizationToken;
+    public void setAccessToken(UUID authorizationToken) {
+        this.accessToken = authorizationToken;
     }
 
     public Date getCreateDate() {
@@ -73,7 +73,7 @@ public class OAuth {
     }
 
     public OAuth(UUID authorizationToken,Date createDate, Date expireDate) {
-        this.authorizationToken = authorizationToken;
+        this.accessToken = authorizationToken;
         this.CreateDate = createDate;
         this.ExpireDate = expireDate;
 

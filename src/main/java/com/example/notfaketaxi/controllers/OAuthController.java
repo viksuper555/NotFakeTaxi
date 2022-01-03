@@ -50,16 +50,18 @@ public class OAuthController {
     @PostMapping(path = "/createauthtoken")
     public ResponseEntity CreateAuthorizationToken(@RequestBody AccessTokenRequest request){
         Optional<OAuth> clientCode = oauthRepo.findOAuthByAuthorizationCode(request.authorization_code);
-        //request.expireDate
+
         Date todayDate = new Date();
-        if(clientCode.isEmpty() || request.expire_date.before(todayDate))
+        if(clientCode.isEmpty() || clientCode.get().getExpireDate().before(todayDate))
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
         UUID token =  UUID.randomUUID();
+        OAuth code = clientCode.get();
+        code.setAccessToken(token);
+        code.setCreateDate(todayDate);
+        code.setExpireDate(new Date(System.currentTimeMillis() + 60 * 1000  * 60 * 24));
 
-        OAuth oauth = new OAuth(token,new Date(), new Date(System.currentTimeMillis() + 60 * 1000  * 60 * 24));
-        oauth.setAuthorizationToken(token);
-        oauthRepo.save(oauth);
+        oauthRepo.save(clientCode.get());
         return new ResponseEntity(token, HttpStatus.OK);
 
     }

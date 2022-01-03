@@ -7,7 +7,6 @@ import java.util.UUID;
 public class AccessTokenRequest {
 
     public UUID authorization_code;
-    public Date expire_date;
 
 
 }
