@@ -30,7 +30,7 @@ public class OAuthController {
         this.clientRepo = clientRepo;
     }
 
-    @PostMapping(path = "/createauthcode")
+    @PostMapping(path = "/code")
     public ResponseEntity CreateAuthorizationCode(@RequestBody AuthorizationCodeRequest request){
         Optional<Client> client = clientRepo.findClientByUsernameAndPassword(request.username, request.password);
 
@@ -48,7 +48,7 @@ public class OAuthController {
 
     }
 
-    @PostMapping(path = "/createaccesstoken")
+    @PostMapping(path = "/token")
     public ResponseEntity CreateAuthorizationToken(@RequestBody AccessTokenRequest request){
         Optional<OAuth> clientCode = oauthRepo.findOAuthByAuthorizationCode(request.authorization_code);
 
