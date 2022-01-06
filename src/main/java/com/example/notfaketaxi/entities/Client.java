@@ -20,6 +20,11 @@ public class Client {
     private String password;
 
     @ManyToMany
+    @JoinTable(
+            name = "client_role",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+
     private Set<Role> roles;
 
     // Getters and Setters
