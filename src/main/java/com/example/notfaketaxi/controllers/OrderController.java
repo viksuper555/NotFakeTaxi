@@ -6,11 +6,13 @@ import com.example.notfaketaxi.entities.Order;
 import com.example.notfaketaxi.models.requests.CreateOrderRequest;
 import com.example.notfaketaxi.models.responses.OrderResponse;
 import com.example.notfaketaxi.repositories.OrderRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -35,12 +37,17 @@ public class OrderController {
     }
 
     @PostMapping("/closeorder")
-    public OrderResponse CloseFinishedOrder(@RequestAttribute Client client, Long orderid)
+    public ResponseEntity CloseFinishedOrder(@RequestAttribute Client client, Long orderid)
     {
-        Order order = orderRepo.getById(orderid);
+        Optional<Order> optOrder = orderRepo.findOrderByIdAndCloseDateIsNull(orderid);
+        if(optOrder.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
+        Order order = optOrder.get();
+        if((order.getCustomer().getId() != client.getId()) && order.getDriver().getId() != client.getId())
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         order.setCloseDate(Instant.now());
         orderRepo.save(order);
-        return new OrderResponse("Okay", order.getId(), order.getDescription(), order.getPrice(), order.getCustomer().getId(), null);
+        return new ResponseEntity(
+                new OrderResponse("Okay", order.getId(), order.getDescription(), order.getPrice(), order.getCustomer().getId(), null), HttpStatus.OK);
     }
 
 }

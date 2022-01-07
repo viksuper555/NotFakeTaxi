@@ -9,6 +9,7 @@ import java.util.OptionalInt;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Optional<Order> findOrderByDescription(String description);
+    Optional<Order> findOrderByIdAndCloseDateIsNull(Long id);
+
 
 }
