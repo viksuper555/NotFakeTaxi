@@ -11,6 +11,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToMany(mappedBy = "roles")
+    Set<Client> likes;
+
     private String name;
 
     public Role(String name, int id) {
