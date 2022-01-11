@@ -2,7 +2,7 @@ package com.notfaketaxi.entities;
 
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "client")
@@ -19,13 +19,14 @@ public class Client {
     @Column()
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "client_role",
             joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
 
-    private Set<Role> roles;
+    private Set<Role> roles = new LinkedHashSet<Role>();
 
     // Getters and Setters
     public Long getId() {
@@ -46,9 +47,29 @@ public class Client {
         this.password = password;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        if(this.roles == null) this.roles = new HashSet<Role>();
+        this.roles.add(role);
+    }
+    public boolean hasRole(String roleName)
+    {
+        if(this.roles == null) return false;
+        return this.roles.stream().anyMatch(item -> Objects.equals(item.getName(), roleName));
+    }
+
     //Constructor
 
-    public Client(){
+    public Client()
+    {
+
     }
     public Client(String username, String password) {
         this.username = username;

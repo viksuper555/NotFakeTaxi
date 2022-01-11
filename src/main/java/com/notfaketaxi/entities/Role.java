@@ -1,6 +1,7 @@
 package com.notfaketaxi.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,13 +13,12 @@ public class Role {
     private int id;
 
     @ManyToMany(mappedBy = "roles")
-    Set<Client> likes;
+    private Set<Client> roles;
 
     private String name;
 
-    public Role(String name, int id) {
+    public Role(String name) {
         this.name = name;
-        this.id = id;
     }
 
     public Role() {

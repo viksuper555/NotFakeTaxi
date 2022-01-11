@@ -4,6 +4,7 @@ import com.notfaketaxi.entities.Client;
 import com.notfaketaxi.entities.OAuth;
 import com.notfaketaxi.models.requests.AccessTokenRequest;
 import com.notfaketaxi.models.requests.AuthorizationCodeRequest;
+import com.notfaketaxi.models.responses.AccessTokenResponse;
 import com.notfaketaxi.models.responses.AuthorizationCodeResponse;
 import com.notfaketaxi.repositories.ClientRepository;
 import com.notfaketaxi.repositories.OAuthRepository;
@@ -63,7 +64,7 @@ public class OAuthController {
         code.setExpireDate(new Date(System.currentTimeMillis() + 60 * 1000  * 60 * 24));
 
         oauthRepo.save(clientCode.get());
-        return new ResponseEntity(token, HttpStatus.OK);
+        return new ResponseEntity(new AccessTokenResponse(token, "Success!"), HttpStatus.OK);
 
     }
 

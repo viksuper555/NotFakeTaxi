@@ -118,5 +118,7 @@ public class Order {
         this.description = description;
         this.createDate = Instant.now();
         this.customer = customer;
+        this.origin = origin;
+        this.destination = destination;
     }
 }

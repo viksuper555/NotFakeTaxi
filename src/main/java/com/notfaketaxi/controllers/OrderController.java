@@ -30,7 +30,10 @@ public class OrderController {
 
 
     @GetMapping("/fetch")
-    public List<Order> getAllOrders() {return orderRepo.findAll();
+    public ResponseEntity getAllOrders(@RequestAttribute Client client) {
+        if(!client.hasRole("Driver"))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        return new ResponseEntity(orderRepo.findOrderByCloseDateIsNullAndAndDriverIsNull(), HttpStatus.OK);
     }
     @PostMapping("/create")
     public ResponseEntity createOrder(@RequestAttribute Client client, @RequestBody CreateOrderRequest request){
@@ -51,10 +54,10 @@ public class OrderController {
                 request.Price, client.getId(), request.Description), HttpStatus.OK);
     }
 
-    @PostMapping("/closeorder")
-    public ResponseEntity CloseFinishedOrder(@RequestAttribute Client client, Long orderid)
+    @PostMapping("/close")
+    public ResponseEntity CloseFinishedOrder(@RequestAttribute Client client, Long id)
     {
-        Optional<Order> optOrder = orderRepo.findOrderByIdAndCloseDateIsNull(orderid);
+        Optional<Order> optOrder = orderRepo.findOrderByIdAndCloseDateIsNull(id);
         if(optOrder.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
         Order order = optOrder.get();
         if((order.getCustomer().getId() != client.getId()) && order.getDriver().getId() != client.getId())
@@ -64,6 +67,24 @@ public class OrderController {
         return new ResponseEntity(
                 new OrderResponse("Success!", order.getId(), order.getOrigin(), order.getDestination(),
                         order.getPrice(),order.getCustomer().getId(), order.getDescription()), HttpStatus.OK);
+    }
+
+    @PostMapping("/accept")
+    public ResponseEntity AcceptOrder(@RequestAttribute Client client, Long id)
+    {
+
+        Optional<Order> optOrder = orderRepo.findOrderByIdAndCloseDateIsNull(id);
+        if(optOrder.isEmpty()) return new ResponseEntity(HttpStatus.NO_CONTENT);
+        Order order = optOrder.get();
+        if(!client.hasRole("Driver"))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        order.setDriver(client);
+        orderRepo.save(order);
+        return new ResponseEntity(
+                new OrderResponse("Success!", order.getId(), order.getOrigin(), order.getDestination(),
+                        order.getPrice(),order.getCustomer().getId(), order.getDescription(), order.getDriver().getId()), HttpStatus.OK);
+
+
     }
 
 }
