@@ -13,12 +13,17 @@ public class OrderResponse extends BaseResponse{
     public String Origin;
     public String Destination;
 
-    public OrderResponse(String message, Long id, String origin, String Destination, double price, Long customerId, String description, Long... driverId) {
+    public OrderResponse(String message){
+        super(message);
+    }
+    public OrderResponse(String message, Long id, String origin, String destination, double price, Long customerId, String description, Long... driverId) {
         super(message);
         Id = id;
         Description = description;
         Price = price;
         CustomerId = customerId;
+        Origin = origin;
+        Destination = destination;
         if(driverId.length > 0)
             DriverId = driverId[0];
 
